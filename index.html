@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Actividad 2 · Prototipos Agente Campus (Unisabana)</title>
+  <style>
+    :root{--bg:#071028;--card:#0b1220;--muted:#9fb0c8;--accent:#0ea5a0;--glass:rgba(255,255,255,0.03)}
+    *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial}
+    body{margin:0;background:linear-gradient(180deg,#061226,#071428);color:#e6eef8;min-height:100vh}
+    header{padding:20px 28px;display:flex;align-items:center;gap:14px}
+    header h1{margin:0;font-size:18px}
+    .container{display:grid;grid-template-columns:300px 1fr;gap:18px;padding:18px}
+    nav{background:var(--card);border-radius:10px;padding:14px;height:calc(100vh - 120px);overflow:auto}
+    nav .logo{font-weight:700;color:var(--accent);margin-bottom:12px}
+    nav button{width:100%;padding:10px;border-radius:8px;border:0;background:transparent;color:var(--muted);text-align:left;margin-bottom:8px;cursor:pointer}
+    nav button.active{background:linear-gradient(90deg, rgba(14,165,160,0.08), rgba(14,165,160,0.03));color:#fff}
+    main{min-height:600px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:12px;padding:16px;margin-bottom:14px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+    .proto-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .row{display:flex;gap:8px;align-items:center}
+    .muted{color:var(--muted);font-size:13px}
+    .chat{display:flex;flex-direction:column;height:500px}
+    .messages{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px}
+    .bubble{max-width:78%;padding:10px 12px;border-radius:12px;background:var(--glass);}
+    .bubble.user{align-self:flex-end;background:linear-gradient(90deg,#0b3b39,#073737);}
+    .composer{display:flex;gap:8px;margin-top:8px}
+    .composer input{flex:1;padding:10px;border-radius:8px;border:0;background:#071428;color:#e6eef8}
+    .composer button{padding:10px 12px;border-radius:8px;border:0;background:var(--accent);cursor:pointer}
+    .vision-preview{height:220px;background:#071428;border-radius:8px;display:flex;align-items:center;justify-content:center;border:1px dashed rgba(255,255,255,0.04)}
+    .results-list{display:grid;gap:8px}
+    .result-item{background:rgba(255,255,255,0.02);padding:10px;border-radius:8px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:13px}
+    .badge{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);font-size:12px}
+    .chart{height:160px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:8px;padding:8px;display:flex;align-items:flex-end;gap:6px}
+    .bar{flex:1;margin:0 4px;border-radius:6px;background:linear-gradient(180deg, rgba(14,165,160,0.6), rgba(14,165,160,0.2));display:flex;align-items:flex-end;justify-content:center}
+    footer{padding:12px 24px;color:var(--muted);font-size:13px}
+    @media (max-width:980px){.container{grid-template-columns:1fr}.proto-grid{grid-template-columns:1fr}.chat{height:420px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div style="width:48px;height:48px;border-radius:10px;background:#061226;display:flex;align-items:center;justify-content:center">🎓</div>
+    <div>
+      <h1>Actividad 2 — Prototipos: Agente Campus (Unisabana)</h1>
+      <div class="muted">Cuatro UIs: Chat, Campus Vision, Clasificación (Soporte Estudiantil), Regresión (Asistencia a eventos)</div>
+    </div>
+  </header>
+  <div class="container">
+    <nav>
+      <div class="logo">Agente Campus · Prototipos</div>
+      <button class="active" data-view="overview">Resumen y entrega</button>
+      <button data-view="agent">Tu Agente (Chat)</button>
+      <button data-view="vision">Campus Vision Companion</button>
+      <button data-view="classif">Clasificación: Soporte Estudiantil</button>
+      <button data-view="regress">Regresión: Asistencia a eventos</button>
+      <hr style="margin:12px 0;border:none;height:1px;background:rgba(255,255,255,0.02)">
+      <div class="muted">Recuerda: sube este archivo renombrado como <code>index.html</code> al repositorio para que GitHub Pages funcione.</div>
+    </nav>
+    <main>
+      <section id="overview" class="card active">
+        <h2>Entregables listos para GitHub Pages</h2>
+        <ul class="muted">
+          <li>Archivo principal: <code>index.html</code> (este archivo)</li>
+          <li>Capturas (usar la vista en el navegador) — 1 diapositiva por UI.</li>
+          <li>Apéndice con datasets ficticios y justificaciones (al final).</li>
+          <li>Video corto opcional: grabar demo en pantalla y subir a Loom/Drive.</li>
+        </ul>
+        <div class="card">
+          <h3>Instrucciones rápidas para subir a GitHub Pages</h3>
+          <ol class="muted">
+            <li>Crear repo nuevo en GitHub</li>
+            <li>Subir este <code>index.html</code> a la raíz del repo</li>
+            <li>Settings → Pages → Deploy from branch → main (root)</li>
+            <li>Esperar ~1 min y abrir <code>https://TUUSUARIO.github.io/NOMBREDELREPO/</code></li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- CHAT -->
+      <section id="agent" class="card" style="display:none">
+        <h2>Tu Agente — Interfaz de Chat</h2>
+        <div class="proto-grid">
+          <div>
+            <div class="chat card">
+              <div class="messages" id="chatMessages">
+                <div class="bubble">Hola 👋 Soy el Agente Campus. Puedo ayudar con trámites, horarios y soporte académico. Escribe: "horario sala B-201" o "necesito cita con bienestar".</div>
+              </div>
+              <div class="composer">
+                <input id="chatInput" placeholder="Escribe tu mensaje..." />
+                <button id="sendBtn">Enviar</button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <h4>Memoria · Base de conocimiento · Habilidades</h4>
+              <ul class="muted">
+                <li>Memoria: últimas consultas, preferencias de contacto (email/WhatsApp).</li>
+                <li>KB: catálogo de espacios, trámites de bienestar, calendario académico.</li>
+                <li>Habilidades: buscar por texto, sugerir formularios, crear tickets de soporte.</li>
+              </ul>
+              <h4 style="margin-top:8px">Justificación (5–8 frases)</h4>
+              <p class="muted">La interfaz de chat replica cómo estudiantes y personal prefieren comunicarse. Integra acciones rápidas (reservar, solicitar cita) para reducir fricción. La memoria contextual permite sugerencias proactivas basadas en consultas previas. El diseño está pensado para integrarse en la app móvil o el portal web. Con datos ficticios demuestra flujos comunes: horarios, solicitudes y creación de tickets de soporte.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VISION -->
+      <section id="vision" class="card" style="display:none">
+        <h2>Campus Vision Companion — Foto → Contexto</h2>
+        <div class="proto-grid">
+          <div>
+            <div class="card">
+              <h4>Flujo de captura</h4>
+              <div class="vision-preview" id="visionPreview">Sube o toma una foto (simulado)</div>
+              <input type="file" id="visionInput" accept="image/*" style="margin-top:8px" />
+              <div style="margin-top:8px" class="muted">Simulamos extracción de metadatos (GPS, timestamp) y matching con catálogo de ubicaciones.</div>
+            </div>
+            <div class="card" id="visionActions" style="display:none">
+              <h4>Resultados</h4>
+              <div class="results-list" id="visionResults"></div>
+              <div style="margin-top:8px" class="row"><button id="viewActivities">Ver actividades</button><button id="openTramite">Ver trámites disponibles</button></div>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <h4>Usuario objetivo / Dolor / Respuesta</h4>
+              <p class="muted">Usuario: estudiante o docente que llega a un espacio nuevo. Dolor: no saber si la sala está ocupada, qué actividad ocurre o a quién dirigirse. Respuesta: con una foto identifica la sala y muestra horarios, actividades y trámites (reservas, soporte AV), y permite acciones inmediatas (reservar, reportar incidente).</p>
+              <h4 style="margin-top:8px">Ejemplo</h4>
+              <div class="muted">Foto → Sala B-201 → Actividad: Taller de Emprendimiento 17:00–19:00 · Tramite: Solicitar equipo AV · Contacto: bienestar@unisabana.edu.co</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CLASSIFICATION (student support) -->
+      <section id="classif" class="card" style="display:none">
+        <h2>Clasificación aplicada — Soporte Estudiantil</h2>
+        <div class="proto-grid">
+          <div>
+            <div class="card">
+              <h4>Enviar solicitud de soporte</h4>
+              <input id="ticketTitle" placeholder="Título (ej: Solicito tutoría financiera)" style="width:100%;padding:8px;border-radius:8px;border:0;background:#071428;margin-bottom:8px">
+              <textarea id="ticketDesc" placeholder="Descripción..." style="width:100%;padding:8px;border-radius:8px;border:0;background:#071428;min-height:90px"></textarea>
+              <div style="display:flex;gap:8px;margin-top:8px"><button id="createTicket">Enviar solicitud</button><button id="loadSample">Cargar ejemplos</button></div>
+            </div>
+            <div class="card" style="margin-top:12px">
+              <h4>Dataset sintético (preview)</h4>
+              <table>
+                <thead><tr><th>ID</th><th>Título</th><th>Clase</th><th>Conf.</th></tr></thead>
+                <tbody id="ticketsPreview"></tbody>
+              </table>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <h4>Detalle · Corrección</h4>
+              <div id="ticketDetail" class="muted">Selecciona una solicitud para ver la predicción (clase y confianza) y corregir si es necesario.</div>
+            </div>
+            <div class="card" style="margin-top:12px">
+              <h4>Justificación (5–8 frases)</h4>
+              <p class="muted">Clasificar solicitudes de soporte estudiantil permite ruteo eficiente a áreas como Bienestar, Asesoría Financiera o Orientación Psicológica. Mostrar la clase predicha y su confianza ayuda a priorizar revisiones manuales cuando la certeza es baja. El campo de retroalimentación permite corregir etiquetas y mejorar la calidad del dataset. Esto reduce tiempos de espera y mejora la experiencia del estudiante. La UI está diseñada para que el personal pueda validar y corregir rápidamente.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- REGRESSION: attendance to events -->
+      <section id="regress" class="card" style="display:none">
+        <h2>Regresión aplicada — Predicción de asistencia a eventos</h2>
+        <div class="proto-grid">
+          <div>
+            <div class="card">
+              <h4>Ingresar variables (evento)</h4>
+              <label class="muted">Tipo de evento</label>
+              <select id="eventType" style="width:100%;padding:8px;border-radius:8px;border:0;background:#071428;margin-bottom:8px"><option value="charla">Charla</option><option value="taller">Taller</option><option value="concierto">Concierto</option></select>
+              <label class="muted">Promoción (0-100) — emails/social</label>
+              <input id="promo" type="number" min="0" max="100" value="30" style="width:100%;padding:8px;border-radius:8px;border:0;background:#071428;margin-bottom:8px">
+              <label class="muted">Día (0=entre semana,1=finde)</label>
+              <select id="isWeekend" style="width:100%;padding:8px;border-radius:8px;border:0;background:#071428;margin-bottom:8px"><option value="0">Entre semana</option><option value="1">Fin de semana</option></select>
+              <div style="display:flex;gap:8px"><button id="predictBtn">Predecir asistencia</button><button id="loadHist">Cargar histórico</button></div>
+            </div>
+            <div class="card" style="margin-top:12px">
+              <h4>Predicción</h4>
+              <div class="muted">Predicción (modelo simple): <strong id="predValue">—</strong> asistentes</div>
+              <div style="margin-top:8px" class="chart" id="chartContainer"></div>
+              <div style="margin-top:8px" class="muted">Si la predicción difiere más del 30% de la media histórica para eventos similares, el agente sugiere: aumentar promoción, cambiar sala o cancelar evento.</div>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <h4>Histórico ficticio (últimos eventos)</h4>
+              <table>
+                <thead><tr><th>Fecha</th><th>Tipo</th><th>Asistencia real</th></tr></thead>
+                <tbody id="histBody"></tbody>
+              </table>
+            </div>
+            <div class="card" style="margin-top:12px">
+              <h4>Justificación (5–8 frases)</h4>
+              <p class="muted">Predecir la asistencia a eventos ayuda a planificar logística (sala, catering, seguridad). Con variables simples (tipo de evento, promoción y día) el agente estima la asistencia y compara con eventos históricos similares. Al detectar desviaciones significativas propone acciones concretas para evitar pérdidas o sobrecupo. La interfaz permite inspeccionar las variables y validar la predicción con el histórico, útil para organizadores y bienestar universitario.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- APPENDIX -->
+      <section id="appendix" class="card">
+        <h2>Apéndice: Datasets ficticios, reglas y entregables</h2>
+        <div class="muted" style="white-space:pre-wrap;line-height:1.4">
+DATASETS FICTICIOS (campos y ejemplos)
+
+1) Catálogo de ubicaciones (Vision & Chat)
+- id: "B-201"
+- nombre: "Sala B-201"
+- tipo: "Aula"
+- capacidad: 40
+- actividades: [{"titulo":"Taller Emprendimiento","inicio":"17:00","fin":"19:00","responsable":"Andrés Gómez"}]
+- contactos: {"bienestar":"bienestar@unisabana.edu.co","av":"soporte.av@unisabana.edu.co"}
+
+2) Solicitudes de soporte estudiantil (Clasificación)
+- id: 201
+- titulo: "Necesito apoyo financiero para matrícula"
+- descripcion: "Solicitud de subsidio para semestre 2026"
+- clase_esperada: "Asesoría Financiera"
+- prediccion: "Asesoría Financiera"
+- confianza: 0.81
+- estado: "abierto"
+
+Otros casos: tutoría académica, orientación psicológica, trámite de homologación.
+
+3) Histórico de asistencia a eventos (Regresión)
+- fecha: "2025-10-05"
+- tipo: "charla"
+- promo: 20
+- weekend: 0
+- asistencia_real: 120
+
+Reglas del agente (simuladas)
+- Clasificación: si confianza < 0.6 => marcar para revisión humana.
+- Regresión: si predicción > media_similar*1.30 o < media_similar*0.7 => alerta y sugerencias automáticas.
+
+ENTREGABLES SUGERIDOS
+- Capturas de cada UI (1 diapositiva por UI)
+- Archivo index.html listo para GitHub Pages
+- Apéndice (este documento) con datasets y justificaciones
+- Video corto demo (opcional)
+
+INSTRUCCIONES PARA SUBIDA A GITHUB
+- Asegúrate que este archivo se llame exactamente <index.html> y súbelo a la raíz del repo.
+- (Opcional) Añade carpetas /assets /css /js si separas archivos. GitHub Pages sirve index.html desde la raíz.
+
+FIN DEL APÉNDICE
+        </div>
+      </section>
+    </main>
+  </div>
+  <footer>Prototipo listo · Universidad de La Sabana · Actividad 2</footer>
+
+  <script>
+    // Navigation
+    document.querySelectorAll('nav button').forEach(btn=>btn.addEventListener('click', (e)=>{
+      document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+      const view = e.currentTarget.dataset.view;
+      document.querySelectorAll('main section').forEach(s=>s.style.display='none');
+      document.getElementById(view).style.display='block';
+      window.scrollTo(0,0);
+    }));
+
+    // Dummy KB
+    const catalog = {
+      "B-201":{id:'B-201',nombre:'Sala B-201',tipo:'Aula',capacidad:40,activities:[{titulo:'Taller Emprendimiento',inicio:'17:00',fin:'19:00',responsable:'Andrés Gómez'}],contacts:{bienestar:'bienestar@unisabana.edu.co',av:'soporte.av@unisabana.edu.co'}}
+    };
+
+    // CHAT
+    const chatMessages = document.getElementById('chatMessages');
+    document.getElementById('sendBtn').addEventListener('click',()=>{
+      const input = document.getElementById('chatInput'); if(!input.value.trim()) return;
+      const text = input.value.trim(); const userBubble = document.createElement('div'); userBubble.className='bubble user'; userBubble.textContent=text; chatMessages.appendChild(userBubble); input.value=''; chatMessages.scrollTop = chatMessages.scrollHeight;
+      setTimeout(()=>{
+        let resp='Lo siento, no entendí. Prueba: "horario sala B-201" o "necesito apoyo financiero"';
+        if(/horario|sala|B-201/i.test(text)){
+          const loc=catalog['B-201']; resp = `Ubicación: ${loc.nombre} — Actividad próxima: ${loc.activities[0].titulo} ${loc.activities[0].inicio}-${loc.activities[0].fin}. Contacto: ${loc.contacts.bienestar}. Acciones: [Reservar] [Reportar]`;
+        } else if(/apoyo|financier|monto|subsidio/i.test(text)){
+          resp = 'Puedo ayudarte con la solicitud de apoyo financiero. ¿Quieres que cree una solicitud de soporte? [Sí] [No]';
+        }
+        const bot = document.createElement('div'); bot.className='bubble'; bot.textContent=resp; chatMessages.appendChild(bot); chatMessages.scrollTop = chatMessages.scrollHeight;
+      },600);
+    });
+
+    // VISION
+    const visionInput = document.getElementById('visionInput');
+    const visionPreview = document.getElementById('visionPreview');
+    const visionResults = document.getElementById('visionResults');
+    visionInput.addEventListener('change',(e)=>{
+      const file = e.target.files[0]; visionPreview.textContent = file ? file.name : 'Sube o toma una foto';
+      setTimeout(()=>{
+        document.getElementById('visionActions').style.display='block'; visionResults.innerHTML='';
+        const fake = {locationId:'B-201',confidence:0.94,metadata:{gps:'4.800,-74.044',timestamp:'2025-10-31T09:00:00'}};
+        const item = document.createElement('div'); item.className='result-item'; item.innerHTML = `<strong>${fake.locationId}</strong> · Confianza ${Math.round(fake.confidence*100)}%<br><span class='muted'>Metadatos: ${fake.metadata.gps} — ${fake.metadata.timestamp}</span>`;
+        visionResults.appendChild(item);
+      },500);
+    });
+    document.getElementById('viewActivities').addEventListener('click',()=>{alert('Actividades para B-201:\n• Taller Emprendimiento 17:00–19:00\n• Reserva disponible 14:00–16:00');});
+    document.getElementById('openTramite').addEventListener('click',()=>{alert('Trámites disponibles:\n• Solicitar equipo AV\n• Solicitar reserva de sala\nContacto: bienestar@unisabana.edu.co');});
+
+    // CLASSIFICATION (soporte estudiantil)
+    let tickets = [
+      {id:201,titulo:'Necesito apoyo financiero para matrícula',descripcion:'Solicitud de subsidio para semestre 2026',prediccion:'Asesoría Financiera',confianza:0.81,estado:'abierto'},
+      {id:202,titulo:'Solicitud de tutoría en macroeconomía',descripcion:'Dificultad en temas de modelaje',prediccion:'Tutoría Académica',confianza:0.76,estado:'abierto'},
+      {id:203,titulo:'Cita orientación psicológica',descripcion:'Estrés académico y ansiedad',prediccion:'Orientación Psicológica',confianza:0.88,estado:'abierto'}
+    ];
+    const ticketsPreview = document.getElementById('ticketsPreview');
+    function renderTickets(){ ticketsPreview.innerHTML=''; tickets.forEach(t=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${t.id}</td><td>${t.titulo}</td><td><span class='badge'>${t.prediccion}</span></td><td>${Math.round(t.confianza*100)}%</td>`; tr.style.cursor='pointer'; tr.addEventListener('click',()=>showTicketDetail(t)); ticketsPreview.appendChild(tr); }); }
+    function showTicketDetail(t){ const det=document.getElementById('ticketDetail'); det.innerHTML=`<strong>ID ${t.id} — ${t.titulo}</strong><p class='muted'>Predicción: <span class='badge'>${t.prediccion}</span> · Confianza: ${Math.round(t.confianza*100)}%</p><label class='muted'>Si la predicción es incorrecta, selecciona la clase correcta:</label><div style='display:flex;gap:8px;margin-top:6px'><select id='correctClass'><option>Asesoría Financiera</option><option>Tutoría Académica</option><option>Orientación Psicológica</option><option>Trámites Administrativos</option></select><button id='applyCorrection'>Aplicar</button></div><p class='muted'>Estado: ${t.estado}</p>`; document.getElementById('applyCorrection').addEventListener('click',()=>{ const newClass = document.getElementById('correctClass').value; t.prediccion=newClass; t.confianza=0.99; alert('Corrección aplicada (simulada)'); renderTickets(); showTicketDetail(t); }); }
+    document.getElementById('loadSample').addEventListener('click',()=>{renderTickets();});
+    document.getElementById('createTicket').addEventListener('click',()=>{ const title=document.getElementById('ticketTitle').value||'Sin título'; const desc=document.getElementById('ticketDesc').value||''; const newId=Math.max(...tickets.map(t=>t.id))+1; let predicted='Trámites Administrativos'; if(/financ/i.test(title+desc)) predicted='Asesoría Financiera'; else if(/tutor/i.test(title+desc)) predicted='Tutoría Académica'; const conf = predicted==='Asesoría Financiera'?0.75:0.6; tickets.push({id:newId,titulo:title,descripcion:desc,prediccion:predicted,confianza:conf,estado:'abierto'}); alert('Solicitud creada (simulada) ID: '+newId); renderTickets(); });
+    renderTickets();
+
+    // REGRESSION (event attendance)
+    let hist = [
+      {fecha:'2025-10-05',tipo:'charla',promo:20,weekend:0,asistencia:120},
+      {fecha:'2025-10-10',tipo:'taller',promo:40,weekend:0,asistencia:80},
+      {fecha:'2025-10-12',tipo:'concierto',promo:60,weekend:1,asistencia:450},
+      {fecha:'2025-10-18',tipo:'charla',promo:25,weekend:0,asistencia:100},
+      {fecha:'2025-10-25',tipo:'taller',promo:50,weekend:1,asistencia:130}
+    ];
+    function renderHist(){ const body=document.getElementById('histBody'); body.innerHTML=''; hist.forEach(h=>{ const r=document.createElement('tr'); r.innerHTML=`<td>${h.fecha}</td><td>${h.tipo}</td><td>${h.asistencia}</td>`; body.appendChild(r); }); const chart=document.getElementById('chartContainer'); chart.innerHTML=''; const max=Math.max(...hist.map(h=>h.asistencia),100); hist.slice(-7).forEach(h=>{ const bar=document.createElement('div'); bar.className='bar'; bar.style.height=(h.asistencia/max*100)+'%'; bar.innerHTML=`<span>${h.asistencia}</span>`; chart.appendChild(bar); }); }
+    document.getElementById('loadHist').addEventListener('click',()=>{ renderHist(); });
+    document.getElementById('predictBtn').addEventListener('click',()=>{
+      const type=document.getElementById('eventType').value; const promo=Number(document.getElementById('promo').value); const weekend=Number(document.getElementById('isWeekend').value);
+      // heuristic model: base by type + promo multiplier + weekend boost
+      const baseMap = {charla:80,taller:60,concierto:300};
+      let pred = Math.round(baseMap[type] + promo*1.5 + (weekend?80:0)); document.getElementById('predValue').textContent=pred;
+      // compute historical mean for same type
+      const same = hist.filter(h=>h.tipo===type); const mean = same.length? Math.round(same.reduce((s,x)=>s+x.asistencia,0)/same.length): Math.round((baseMap[type] + 100)/2);
+      if(pred > mean*1.3 || pred < mean*0.7){
+        const msg = pred>mean*1.3? 'predicción alta: sugerir aumentar logística (más sillas, seguridad)' : 'predicción baja: sugerir aumentar promoción o cancelar evento si costos > beneficio';
+        alert('Alerta: desviación significativa respecto al histórico. ' + msg);
+      }
+    });
+    renderHist();
+  </script>
+</body>
+</html>
